@@ -12,6 +12,16 @@ class HistoryService {
   // async addCity(city: string) {}
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
   // async removeCity(id: string) {}
+  private async read() {
+    return await fs.readFile('db/db.json', {
+      flag: 'a+',
+      encoding: 'utf8',
+    });
+  }
+
+  private async write(cities: City[]) {
+    return await fs.writeFile('db/db.json', JSON.stringify(cities, null, '\t'));
+  }
 }
 
 export default new HistoryService();
