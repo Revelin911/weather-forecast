@@ -6,7 +6,7 @@ import WeatherService from '../../service/weatherService.js';
 import weatherService from '../../service/weatherService.js';
 
 // TODO: POST Request with city name to retrieve weather data
-router.post('/', async (req: Request, res: Response) => {
+router.post('*', async (req: Request, res: Response) => {
 const cityName = req.body.location;
 
 if(!cityName) {
