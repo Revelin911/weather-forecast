@@ -3,11 +3,10 @@ const router = Router();
 
 import HistoryService from '../../service/historyService.js';
 import WeatherService from '../../service/weatherService.js';
-import weatherService from '../../service/weatherService.js';
 
 // TODO: POST Request with city name to retrieve weather data
 router.post('*', async (req: Request, res: Response) => {
-  const cityName = req.body.location;
+  const cityName = req.body.cityName;
 
   if (!cityName) {
     return res.status(400).json({ error: 'Please add a city name' });

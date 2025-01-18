@@ -10,7 +10,7 @@ interface Coordinates {
 
 // TODO: Define a class for the Weather object
 class Weather {
-  date: number;
+  date: string;
   city: string;
   icon: string;
   description: string;
@@ -18,7 +18,7 @@ class Weather {
   humidity: number;
   windSpeed: number;
 
-  constructor(date: number, city: string, icon: string, description: string, temperature: number, humidity: number, windSpeed: number) {
+  constructor(date: string, city: string, icon: string, description: string, temperature: number, humidity: number, windSpeed: number) {
     this.date = date;
     this.city = city;
     this.icon = icon;
@@ -36,14 +36,14 @@ class WeatherService {
   private city: string;
 
   // TODO: Define the baseURL, API key, and city name properties
-  constructor(city: string) {
+  constructor() {
     this.baseURL = process.env.API_BASE_URL || '';
     this.apiKey = process.env.API_KEY || '';
-    this.city = city;
+    this.city = '';
   }
-  setCity(city:string) {
-    this.city = city;
-  }
+  // setCity(city: string) {
+  //   this.city = city;
+  // }
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string) {
@@ -60,7 +60,7 @@ class WeatherService {
 
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
-    const {latitude, longitude } = locationData;
+    const { latitude, longitude } = locationData;
     return { latitude, longitude };
   }
 
@@ -88,17 +88,17 @@ class WeatherService {
     const query = this.buildWeatherQuery(coordinates);
     try {
       const response = await fetch(`${this.baseURL}/weather?${query}&appid=${this.apiKey}`);
-const weatherData = await response.json();
-return weatherData;
+      const weatherData = await response.json();
+      return weatherData;
 
     } catch (err) {
       console.log('Cannot fetch weather data', err);
       return err;
     }
-    }
+  }
 
   // TODO: Build parseCurrentWeather method
-  private parseCurrentWeather(response: any) { 
+  private parseCurrentWeather(response: any) {
     const weatherData = response;
     return new Weather(
       dayjs.unix(weatherData.dt).format('M/D/YYYY'),
@@ -124,12 +124,12 @@ return weatherData;
       forecast.push(
         new Weather(
           dayjs.unix(weatherItem.dt).format('M/D/YYYY'),
-  currentWeather.city,
+          currentWeather.city,
           weatherItem.weather[0].icon,
           weatherItem.weather[0].description,
-weatherItem.main.temp,
-  weatherItem.main.humidity,
-  weatherItem.wind.speed,
+          weatherItem.main.temp,
+          weatherItem.main.humidity,
+          weatherItem.wind.speed,
         )
       );
     }
@@ -138,16 +138,18 @@ weatherItem.main.temp,
 
   // TODO: Complete getWeatherForCity method
   async getWeatherForCity(city: string) {
-const coordinates = await this.fetchAndDestructureLocationData(city);
-if (coordinates) {
-  const weatherData = await this.fetchWeatherData(coordinates);
-  const currentWeather = this.parseCurrentWeather(weatherData);
-  const forecast = this.buildForecastArray(currentWeather, weatherData.list);
-  return {currentWeather, forecast};
-} else {
-    console.error('Cannot retrieve weather');
-    return null;
-}
+    // this.setCity(city)
+    this.city = city;
+    const coordinates = await this.fetchAndDestructureLocationData(this.city);
+    if (coordinates) {
+      const weatherData = await this.fetchWeatherData(coordinates);
+      const currentWeather = this.parseCurrentWeather(weatherData);
+      const forecast = this.buildForecastArray(currentWeather, weatherData.list);
+      return { currentWeather, forecast };
+    } else {
+      console.error('Cannot retrieve weather');
+      return null;
+    }
   }
 }
 
