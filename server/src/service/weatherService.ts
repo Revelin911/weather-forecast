@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -33,12 +33,16 @@ class Weather {
 class WeatherService {
   private baseURL?: string;
   private apiKey?: string;
-  private city = '';
+  private city: string;
 
   // TODO: Define the baseURL, API key, and city name properties
-  constructor() {
+  constructor(city: string) {
     this.baseURL = process.env.API_BASE_URL || '';
     this.apiKey = process.env.API_KEY || '';
+    this.city = city;
+  }
+  setCity(city:string) {
+    this.city = city;
   }
 
   // TODO: Create fetchLocationData method
@@ -95,7 +99,7 @@ return weatherData;
 
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any) { 
-    const weatherData = response.current;
+    const weatherData = response;
     return new Weather(
       dayjs.unix(weatherData.dt).format('M/D/YYYY'),
       response.city.name,
