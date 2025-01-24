@@ -47,8 +47,9 @@ class WeatherService {
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string) {
+    console.log(`${this.baseURL}/geo/1.0/direct?q=${query}&appid=${this.apiKey}`)
     try {
-      const response = await fetch(`${this.baseURL}/geo/1.0/direct?city=${query}&appid=${this.apiKey}`);
+      const response = await fetch(`${this.baseURL}/geo/1.0/direct?q=${query}&appid=${this.apiKey}`);
 
       return await response.json();
 
@@ -87,7 +88,7 @@ class WeatherService {
   private async fetchWeatherData(coordinates: Coordinates) {
     const query = this.buildWeatherQuery(coordinates);
     try {
-      const response = await fetch(`${this.baseURL}/weather?${query}&appid=${this.apiKey}`);
+      const response = await fetch(`${this.baseURL}/weather/1.0/direct?${query}&appid=${this.apiKey}`);
       const weatherData = await response.json();
       return weatherData;
 
@@ -141,6 +142,7 @@ class WeatherService {
     // this.setCity(city)
     this.city = city;
     const coordinates = await this.fetchAndDestructureLocationData(this.city);
+    console.log(coordinates);
     if (coordinates) {
       const weatherData = await this.fetchWeatherData(coordinates);
       const currentWeather = this.parseCurrentWeather(weatherData);
