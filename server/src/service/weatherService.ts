@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
 }
 
 // TODO: Define a class for the Weather object
@@ -47,11 +47,11 @@ class WeatherService {
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string) {
-    console.log(`${this.baseURL}/geo/1.0/direct?q=${query}&appid=${this.apiKey}`)
+  
     try {
       const response = await fetch(`${this.baseURL}/geo/1.0/direct?q=${query}&appid=${this.apiKey}`);
-
-      return await response.json();
+const json = await response.json();
+return json[0];
 
     } catch (err) {
       console.log('Error:', err);
@@ -61,8 +61,9 @@ class WeatherService {
 
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
-    const { latitude, longitude } = locationData;
-    return { latitude, longitude };
+    
+    const { lat, lon } = locationData;
+    return { lat, lon };
   }
 
   // TODO: Create buildGeocodeQuery method
@@ -72,7 +73,7 @@ class WeatherService {
 
   // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
-    const weatherQuery = `lat=${coordinates.latitude}&lon=${coordinates.longitude}`;
+    const weatherQuery = `lat=${coordinates.lat}&lon=${coordinates.lon}`;
     return weatherQuery;
   }
 
@@ -80,16 +81,18 @@ class WeatherService {
   private async fetchAndDestructureLocationData(city: string) {
     const query = this.buildGeocodeQuery(city);
     const locationData = await this.fetchLocationData(query);
-
     return this.destructureLocationData(locationData);
+    
   }
 
   // TODO: Create fetchWeatherData method
   private async fetchWeatherData(coordinates: Coordinates) {
+    
     const query = this.buildWeatherQuery(coordinates);
     try {
-      const response = await fetch(`${this.baseURL}/weather/1.0/direct?${query}&appid=${this.apiKey}`);
+      const response = await fetch(`${this.baseURL}/data/2.5/forecast?${query}&units=imperial&appid=${this.apiKey}`);
       const weatherData = await response.json();
+      console.log('95weatherData', weatherData)
       return weatherData;
 
     } catch (err) {
@@ -100,10 +103,12 @@ class WeatherService {
 
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any) {
+    
     const weatherData = response;
+    console.log('weatherData', weatherData)
     return new Weather(
       dayjs.unix(weatherData.dt).format('M/D/YYYY'),
-      response.city.name,
+      this.city,
       weatherData.weather[0].icon,
       weatherData.weather[0].description,
       weatherData.main.temp,
@@ -139,11 +144,12 @@ class WeatherService {
 
   // TODO: Complete getWeatherForCity method
   async getWeatherForCity(city: string) {
-    // this.setCity(city)
+    console.log(this.city)
     this.city = city;
-    const coordinates = await this.fetchAndDestructureLocationData(this.city);
-    console.log(coordinates);
+    const coordinates = await this.fetchAndDestructureLocationData(city);
+    
     if (coordinates) {
+      console.log('coordinates', coordinates);
       const weatherData = await this.fetchWeatherData(coordinates);
       const currentWeather = this.parseCurrentWeather(weatherData);
       const forecast = this.buildForecastArray(currentWeather, weatherData.list);
