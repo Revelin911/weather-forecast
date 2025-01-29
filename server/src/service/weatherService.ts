@@ -14,16 +14,16 @@ class Weather {
   city: string;
   icon: string;
   description: string;
-  temperature: number;
+  tempF: number;
   humidity: number;
   windSpeed: number;
 
-  constructor(date: string, city: string, icon: string, description: string, temperature: number, humidity: number, windSpeed: number) {
+  constructor(date: string, city: string, icon: string, description: string, tempF: number, humidity: number, windSpeed: number) {
     this.date = date;
     this.city = city;
     this.icon = icon;
     this.description = description;
-    this.temperature = temperature;
+    this.tempF = tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
   }
@@ -92,8 +92,9 @@ return json[0];
     try {
       const response = await fetch(`${this.baseURL}/data/2.5/forecast?${query}&units=imperial&appid=${this.apiKey}`);
       const weatherData = await response.json();
-      console.log('95weatherData', weatherData)
-      return weatherData;
+      const currentWeather = this.parseCurrentWeather(weatherData?.list[0]);
+      const forecast = this.buildForecastArray(currentWeather, weatherData.list);
+      return forecast;
 
     } catch (err) {
       console.log('Cannot fetch weather data', err);
@@ -105,14 +106,14 @@ return json[0];
   private parseCurrentWeather(response: any) {
     
     const weatherData = response;
-    console.log('weatherData', weatherData)
+   
     return new Weather(
       dayjs.unix(weatherData.dt).format('M/D/YYYY'),
       this.city,
       weatherData.weather[0].icon,
       weatherData.weather[0].description,
       weatherData.main.temp,
-      weatherData.humidity,
+      weatherData.main.humidity,
       weatherData.wind.speed
     );
   }
@@ -151,9 +152,8 @@ return json[0];
     if (coordinates) {
       console.log('coordinates', coordinates);
       const weatherData = await this.fetchWeatherData(coordinates);
-      const currentWeather = this.parseCurrentWeather(weatherData);
-      const forecast = this.buildForecastArray(currentWeather, weatherData.list);
-      return { currentWeather, forecast };
+      
+      return weatherData;
     } else {
       console.error('Cannot retrieve weather');
       return null;
