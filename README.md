@@ -4,9 +4,7 @@
 
 This project is helping understand the concepts of working with API's. The reason behind this is to get some practice working with the front end and the back end. Making these two work together properly will help the user retrieve data appropriately. This project helps usability for user when they are searching for the weather forecast in a specific city. I was able to learn how to try to tie the front end and the back end together. Without the proper information of either, the app would not work appropriately for the user. It helped me get more practice in to work each method appropriately and reading and udnerstanding what eahc method is doing. 
 
-## Table of Contents (Optional)
-
-If your README is long, add a table of contents to make it easy for users to find what they need.
+## Table of Contents 
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -15,16 +13,12 @@ If your README is long, add a table of contents to make it easy for users to fin
 
 ## Installation
 
-<!-- What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running. -->
+These will be the following downloads/ installations that will be necessary. For starters, these libraries will need to be downloaded onto your computer. VS Code, or some sort of code editor, will need to be downloaded as well. Inside the code editor, you will need the Inquirer package downloaded. Running "npm i" in the command terminal will install all the node modules you will need. 
 
 ## Usage
 
-The way to use this would be to start your command terminal. In the terminal type "npm run build". Once this has completed, still in the termianl, type "npm run start". The app should begin running.
-
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
-
+In order for this project to work properly, you will need to download the libraries onto your local device for use with your code editor. In the code editor, you will open up a terminal and begin installing the node modules. To begin using the application type "npm run build" into the terminal. After this begins you will run "npm run start:dev". This command should begin running the site on your local device.
+  
 ## Credits
 
 ![OpenWeather API Documentation](https://openweathermap.org/api)
@@ -34,7 +28,7 @@ The way to use this would be to start your command terminal. In the terminal typ
 
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) [2025] [Evelin Robles]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -56,4 +50,11 @@ SOFTWARE.
 
 ## Tests
 
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.
+If everyhting runs correctly your default browser will open up and show somehting similar to the following:
+![Prompt Weather Page](assets/images/Weather.png)
+Once you enter a city, the weather details will show up:
+![Forecast Example](assets/images/Forecast.png)
+
+
+![Deployed Application on Render](https://weather-forecast-wq29.onrender.com)
+
