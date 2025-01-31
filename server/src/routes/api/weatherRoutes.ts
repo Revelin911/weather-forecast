@@ -1,10 +1,11 @@
+//import routes
 import { Router, type Request, type Response } from 'express';
 const router = Router();
 
 import HistoryService from '../../service/historyService.js';
 import WeatherService from '../../service/weatherService.js';
 
-// TODO: POST Request with city name to retrieve weather data
+//POST Request with city name to retrieve weather data
 router.post('/', async (req: Request, res: Response) => {
   const cityName = req.body.cityName;
 
@@ -12,11 +13,10 @@ router.post('/', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Please add a city name' });
   }
 
-  // TODO: GET weather data from city name
-  // TODO: save city to search history
+  //GET weather data from city name
+  //save city to search history
   try {
     const weatherData = await WeatherService.getWeatherForCity(cityName);
-console.log('WRweatherData', weatherData)
     await HistoryService.addCity(cityName);
 
     return res.json(weatherData);
@@ -26,7 +26,7 @@ console.log('WRweatherData', weatherData)
   }
 });
 
-// TODO: GET search history
+//GET search history
 router.get('/history', async (_req: Request, res: Response) => {
   try {
     const searchHistory = await HistoryService.getCities();
@@ -37,7 +37,7 @@ router.get('/history', async (_req: Request, res: Response) => {
   }
 });
 
-// * BONUS TODO: DELETE city from search history
+//DELETE city from search history
 router.delete('/history/:id', async (req: Request, res: Response) => {
   const cityId = req.params.id;
 
